@@ -248,8 +248,13 @@ define i1 @udiv_ne_big(i8 %x, i8 %y) {
 
 define i1 @udiv_eq_not_big(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_eq_not_big(
-; CHECK-NEXT:    [[D:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[R:%.*]] = icmp eq i8 [[D]], 127
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 127
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ule i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[TMP5:%.*]] = shl nuw nsw i16 [[TMP2]], 7
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    [[R:%.*]] = and i1 [[TMP4]], [[TMP6]]
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %d = udiv i8 %x, %y

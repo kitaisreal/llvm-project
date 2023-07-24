@@ -5,9 +5,15 @@
 
 define i1 @udiv_icmp_eq_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp eq i8 %1, %z
@@ -16,9 +22,15 @@ define i1 @udiv_icmp_eq_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_eq_i8_commuted(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i8_commuted(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp eq i8 %z, %1
@@ -27,9 +39,14 @@ define i1 @udiv_icmp_eq_i8_commuted(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_eq_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_eq_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i8 [[TMP1]], 5
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 5
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ule i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw nsw i16 [[TMP2]], 6
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    [[TMP7:%.*]] = and i1 [[TMP4]], [[TMP6]]
+; CHECK-NEXT:    ret i1 [[TMP7]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp eq i8 %1, 5
@@ -38,9 +55,15 @@ define i1 @udiv_icmp_eq_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_eq_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i32 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i32 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i32 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i32 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp eq i16 %1, %z
@@ -49,9 +72,15 @@ define i1 @udiv_icmp_eq_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_eq_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i64 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i64 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i64 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i64 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp eq i32 %1, %z
@@ -60,9 +89,15 @@ define i1 @udiv_icmp_eq_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_eq_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i128 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i128 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i128 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i128 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp eq i64 %1, %z
@@ -71,9 +106,15 @@ define i1 @udiv_icmp_eq_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_eq_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i256 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i256 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i256 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i256 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp eq i128 %1, %z
@@ -82,9 +123,15 @@ define i1 @udiv_icmp_eq_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_eq_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_eq_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp eq <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw <2 x i16> [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule <2 x i16> [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw <2 x i16> [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt <2 x i16> [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = and <2 x i1> [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP8]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp eq <2 x i8> %1, %z
@@ -93,9 +140,15 @@ define <2 x i1> @udiv_icmp_eq_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 
 define i1 @udiv_icmp_ne_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ne i8 %1, %z
@@ -104,9 +157,15 @@ define i1 @udiv_icmp_ne_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ne_i8_commuted(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i8_commuted(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ne i8 %z, %1
@@ -115,9 +174,14 @@ define i1 @udiv_icmp_ne_i8_commuted(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ne_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_ne_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i8 [[TMP1]], 5
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 5
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ugt i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw nsw i16 [[TMP2]], 6
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    [[TMP7:%.*]] = or i1 [[TMP4]], [[TMP6]]
+; CHECK-NEXT:    ret i1 [[TMP7]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ne i8 %1, 5
@@ -126,9 +190,15 @@ define i1 @udiv_icmp_ne_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_ne_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i32 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i32 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i32 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i32 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp ne i16 %1, %z
@@ -137,9 +207,15 @@ define i1 @udiv_icmp_ne_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_ne_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i64 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i64 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i64 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i64 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp ne i32 %1, %z
@@ -148,9 +224,15 @@ define i1 @udiv_icmp_ne_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_ne_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i128 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i128 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i128 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i128 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp ne i64 %1, %z
@@ -159,9 +241,15 @@ define i1 @udiv_icmp_ne_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_ne_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i256 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i256 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i256 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule i256 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or i1 [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret i1 [[TMP8]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp ne i128 %1, %z
@@ -170,9 +258,15 @@ define i1 @udiv_icmp_ne_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_ne_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_ne_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ne <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw <2 x i16> [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt <2 x i16> [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw <2 x i16> [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ule <2 x i16> [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[TMP8:%.*]] = or <2 x i1> [[TMP5]], [[TMP7]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP8]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp ne <2 x i8> %1, %z
@@ -181,9 +275,13 @@ define <2 x i1> @udiv_icmp_ne_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 
 define i1 @udiv_icmp_ugt_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i16 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ugt i8 %1, %z
@@ -192,9 +290,13 @@ define i1 @udiv_icmp_ugt_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ugt_reverse_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_reverse_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i16 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ult i8 %z, %1
@@ -203,9 +305,11 @@ define i1 @udiv_icmp_ugt_reverse_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ugt_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i8 [[TMP1]], 5
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 6
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ule i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP4]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ugt i8 %1, 5
@@ -214,9 +318,13 @@ define i1 @udiv_icmp_ugt_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_ugt_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i32 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i32 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i32 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp ugt i16 %1, %z
@@ -225,9 +333,13 @@ define i1 @udiv_icmp_ugt_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_ugt_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i64 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i64 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i64 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp ugt i32 %1, %z
@@ -236,9 +348,13 @@ define i1 @udiv_icmp_ugt_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_ugt_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i128 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i128 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i128 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp ugt i64 %1, %z
@@ -247,9 +363,13 @@ define i1 @udiv_icmp_ugt_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_ugt_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i256 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i256 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i256 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp ugt i128 %1, %z
@@ -258,9 +378,13 @@ define i1 @udiv_icmp_ugt_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_ugt_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_ugt_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw <2 x i16> [[TMP3]], <i16 1, i16 1>
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw <2 x i16> [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule <2 x i16> [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP6]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp ugt <2 x i8> %1, %z
@@ -269,9 +393,12 @@ define <2 x i1> @udiv_icmp_ugt_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) 
 
 define i1 @udiv_icmp_uge_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp uge i8 %1, %z
@@ -280,9 +407,12 @@ define i1 @udiv_icmp_uge_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_uge_reverse_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_reverse_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ule i8 %z, %1
@@ -291,9 +421,11 @@ define i1 @udiv_icmp_uge_reverse_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_uge_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_uge_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ugt i8 [[TMP1]], 4
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 5
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ule i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP4]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp uge i8 %1, 5
@@ -302,9 +434,12 @@ define i1 @udiv_icmp_uge_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_uge_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i32 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i32 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp uge i16 %1, %z
@@ -313,9 +448,12 @@ define i1 @udiv_icmp_uge_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_uge_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i64 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i64 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp uge i32 %1, %z
@@ -324,9 +462,12 @@ define i1 @udiv_icmp_uge_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_uge_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i128 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i128 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp uge i64 %1, %z
@@ -335,9 +476,12 @@ define i1 @udiv_icmp_uge_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_uge_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i256 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i256 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp uge i128 %1, %z
@@ -346,9 +490,12 @@ define i1 @udiv_icmp_uge_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_uge_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_uge_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp uge <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw <2 x i16> [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule <2 x i16> [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP5]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp uge <2 x i8> %1, %z
@@ -357,9 +504,12 @@ define <2 x i1> @udiv_icmp_uge_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) 
 
 define i1 @udiv_icmp_ult_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ult i8 %1, %z
@@ -368,9 +518,12 @@ define i1 @udiv_icmp_ult_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ult_reverse_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_reverse_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ugt i8 %z, %1
@@ -379,9 +532,11 @@ define i1 @udiv_icmp_ult_reverse_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ult_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_ult_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], 5
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 5
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ugt i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP4]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ult i8 %1, 5
@@ -390,9 +545,12 @@ define i1 @udiv_icmp_ult_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_ult_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i32 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i32 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp ult i16 %1, %z
@@ -401,9 +559,12 @@ define i1 @udiv_icmp_ult_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_ult_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i64 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i64 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp ult i32 %1, %z
@@ -412,9 +573,12 @@ define i1 @udiv_icmp_ult_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_ult_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i128 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i128 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp ult i64 %1, %z
@@ -423,9 +587,12 @@ define i1 @udiv_icmp_ult_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_ult_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i256 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt i256 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP5]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp ult i128 %1, %z
@@ -434,9 +601,12 @@ define i1 @udiv_icmp_ult_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_ult_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_ult_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw <2 x i16> [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ugt <2 x i16> [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP5]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp ult <2 x i8> %1, %z
@@ -445,9 +615,13 @@ define <2 x i1> @udiv_icmp_ult_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) 
 
 define i1 @udiv_icmp_ule_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i16 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ule i8 %1, %z
@@ -456,9 +630,13 @@ define i1 @udiv_icmp_ule_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ule_reverse_i8(i8 %x, i8 %y, i8 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_reverse_i8(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i8 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Z:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i16 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp uge i8 %z, %1
@@ -467,9 +645,11 @@ define i1 @udiv_icmp_ule_reverse_i8(i8 %x, i8 %y, i8 %z) {
 
 define i1 @udiv_icmp_ule_i8_constant(i8 %x, i8 %y) {
 ; CHECK-LABEL: @udiv_icmp_ule_i8_constant(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ult i8 [[TMP1]], 6
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 6
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ugt i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP4]]
 ;
   %1 = udiv i8 %x, %y
   %2 = icmp ule i8 %1, 5
@@ -478,9 +658,13 @@ define i1 @udiv_icmp_ule_i8_constant(i8 %x, i8 %y) {
 
 define i1 @udiv_icmp_ule_i16(i16 %x, i16 %y, i16 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i16(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i16 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i16 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i16 [[X:%.*]] to i32
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i16 [[Y:%.*]] to i32
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i16 [[Z:%.*]] to i32
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i32 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i32 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i32 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i16 %x, %y
   %2 = icmp ule i16 %1, %z
@@ -489,9 +673,13 @@ define i1 @udiv_icmp_ule_i16(i16 %x, i16 %y, i16 %z) {
 
 define i1 @udiv_icmp_ule_i32(i32 %x, i32 %y, i32 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i32(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i32 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i32 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[Y:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[Z:%.*]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i64 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i64 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i64 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i32 %x, %y
   %2 = icmp ule i32 %1, %z
@@ -500,9 +688,13 @@ define i1 @udiv_icmp_ule_i32(i32 %x, i32 %y, i32 %z) {
 
 define i1 @udiv_icmp_ule_i64(i64 %x, i64 %y, i64 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i64(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i64 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i64 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i64 [[X:%.*]] to i128
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i64 [[Y:%.*]] to i128
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i64 [[Z:%.*]] to i128
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i128 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i128 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i128 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i64 %x, %y
   %2 = icmp ule i64 %1, %z
@@ -511,9 +703,13 @@ define i1 @udiv_icmp_ule_i64(i64 %x, i64 %y, i64 %z) {
 
 define i1 @udiv_icmp_ule_i128(i128 %x, i128 %y, i128 %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i128(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv i128 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule i128 [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret i1 [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i128 [[X:%.*]] to i256
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i128 [[Y:%.*]] to i256
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i128 [[Z:%.*]] to i256
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i256 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i256 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt i256 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret i1 [[TMP6]]
 ;
   %1 = udiv i128 %x, %y
   %2 = icmp ule i128 %1, %z
@@ -522,9 +718,13 @@ define i1 @udiv_icmp_ule_i128(i128 %x, i128 %y, i128 %z) {
 
 define <2 x i1> @udiv_icmp_ule_i8_vector(<2 x i8> %x, <2 x i8> %y, <2 x i8> %z) {
 ; CHECK-LABEL: @udiv_icmp_ule_i8_vector(
-; CHECK-NEXT:    [[TMP1:%.*]] = udiv <2 x i8> [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[TMP2:%.*]] = icmp ule <2 x i8> [[TMP1]], [[Z:%.*]]
-; CHECK-NEXT:    ret <2 x i1> [[TMP2]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext <2 x i8> [[X:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP2:%.*]] = zext <2 x i8> [[Y:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP3:%.*]] = zext <2 x i8> [[Z:%.*]] to <2 x i16>
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw <2 x i16> [[TMP3]], <i16 1, i16 1>
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw <2 x i16> [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ugt <2 x i16> [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    ret <2 x i1> [[TMP6]]
 ;
   %1 = udiv <2 x i8> %x, %y
   %2 = icmp ule <2 x i8> %1, %z

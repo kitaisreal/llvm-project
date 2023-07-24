@@ -4319,6 +4319,99 @@ foldShiftIntoShiftInAnotherHandOfAndInICmp(ICmpInst &I, const SimplifyQuery SQ,
                             Constant::getNullValue(WidestTy));
 }
 
+/// Fold icmp (udiv X, Y), Z.
+static Value *foldICmpUDiv(ICmpInst &Cmp, InstCombiner::BuilderTy &Builder) {
+  if (Cmp.isSigned())
+    return nullptr;
+
+  Value *X = nullptr;
+  Value *Y = nullptr;
+  Value *Z = nullptr;
+
+  ICmpInst::Predicate Pred;
+  if (!match(&Cmp, m_c_ICmp(Pred, m_OneUse(m_UDiv(m_Value(X), m_Value(Y))),
+                            m_Value(Z))))
+    return nullptr;
+
+  Type *ExtendedType = X->getType()->getExtendedType();
+  unsigned IntegerBitWidth = ExtendedType->getScalarSizeInBits();
+
+  // Apply following transformations.
+  // Assuming that x, y, z are extended to types that are twice as wide.
+  //
+  // Greater:
+  // x / y > z --> x >= y * (z + 1)
+  //
+  // Greater or equal:
+  // x / y >= z --> x >= y * z
+  //
+  // Less:
+  // x / y < z --> x < y * z
+  //
+  // Less or equal:
+  // x / y <= z --> x < y * (z + 1)
+  //
+  // Equal:
+  // x / y == z -->
+  // is_less = x < y * z;
+  // is_less_or_equal = x < y * z + y;
+  // result = is_less_or_equal && !is_less
+  //
+  // Not equal:
+  // x / y != z -->
+  // is_less = x < y * z;
+  // is_greater = x >= y * z + y;
+  // result = is_less || is_greater
+  //
+
+  X = Builder.CreateZExt(X, ExtendedType);
+  Y = Builder.CreateZExt(Y, ExtendedType);
+  Z = Builder.CreateZExt(Z, ExtendedType);
+
+  switch (Cmp.getPredicate()) {
+  case ICmpInst::ICMP_EQ: {
+    Value *YMultiplyZ = Builder.CreateNUWMul(Y, Z);
+    Value *IsLess = Builder.CreateICmpULT(X, YMultiplyZ);
+    Value *IsLessOrEqual =
+        Builder.CreateICmpULT(X, Builder.CreateNUWAdd(YMultiplyZ, Y));
+
+    return Builder.CreateAnd(Builder.CreateNot(IsLess), IsLessOrEqual);
+  }
+  case ICmpInst::ICMP_NE: {
+    Value *YMultiplyZ = Builder.CreateNUWMul(Y, Z);
+    Value *IsLess = Builder.CreateICmpULT(X, YMultiplyZ);
+    Value *IsGreater =
+        Builder.CreateICmpUGE(X, Builder.CreateNUWAdd(YMultiplyZ, Y));
+
+    return Builder.CreateOr(IsLess, IsGreater);
+  }
+  case ICmpInst::ICMP_UGT: {
+    Value *ConstantOne = ConstantVector::getIntegerValue(
+        ExtendedType, APInt::getOneBitSet(IntegerBitWidth, 0));
+    return Builder.CreateICmpUGE(
+        X, Builder.CreateNUWMul(Y, Builder.CreateAdd(Z, ConstantOne, {},
+                                                     /*HasNUW*/ true,
+                                                     /*HasNSW*/ true)));
+  }
+  case ICmpInst::ICMP_UGE:
+    return Builder.CreateICmpUGE(X, Builder.CreateNUWMul(Y, Z));
+  case ICmpInst::ICMP_ULT:
+    return Builder.CreateICmpULT(X, Builder.CreateNUWMul(Y, Z));
+  case ICmpInst::ICMP_ULE: {
+    Value *ConstantOne = ConstantVector::getIntegerValue(
+        ExtendedType, APInt::getOneBitSet(IntegerBitWidth, 0));
+    return Builder.CreateICmpULT(
+        X, Builder.CreateNUWMul(Y, Builder.CreateAdd(Z, ConstantOne, {},
+                                                     /*HasNUW*/ true,
+                                                     /*HasNSW*/ true)));
+  }
+  default:
+    llvm_unreachable("Unsupported predicate");
+  }
+
+  return nullptr;
+}
+
 /// Fold
 ///   (-1 u/ x) u< y
 ///   ((x * y) ?/ x) != y
@@ -6837,6 +6930,10 @@ Instruction *InstCombinerImpl::visitICmpInst(ICmpInst &I) {
 
   if (Instruction *Res = foldICmpInstWithConstant(I))
     return Res;
+
+  if (Value *V = foldICmpUDiv(I, Builder)) {
+    return replaceInstUsesWith(I, V);
+  }
 
   // Try to match comparison as a sign bit test. Intentionally do this after
   // foldICmpInstWithConstant() to potentially let other folds to happen first.

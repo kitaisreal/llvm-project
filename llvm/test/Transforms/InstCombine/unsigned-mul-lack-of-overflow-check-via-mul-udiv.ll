@@ -136,8 +136,14 @@ define i1 @t7_extrause2(i8 %x, i8 %y) {
 define i1 @n8_different_x(i8 %x0, i8 %x1, i8 %y) {
 ; CHECK-LABEL: @n8_different_x(
 ; CHECK-NEXT:    [[T0:%.*]] = mul i8 [[X0:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[T1:%.*]] = udiv i8 [[T0]], [[X1:%.*]]
-; CHECK-NEXT:    [[R:%.*]] = icmp eq i8 [[T1]], [[Y]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[T0]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[X1:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Y]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[R:%.*]] = and i1 [[TMP5]], [[TMP7]]
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = mul i8 %x0, %y
@@ -149,8 +155,14 @@ define i1 @n8_different_x(i8 %x0, i8 %x1, i8 %y) {
 define i1 @n9_different_y(i8 %x, i8 %y0, i8 %y1) {
 ; CHECK-LABEL: @n9_different_y(
 ; CHECK-NEXT:    [[T0:%.*]] = mul i8 [[X:%.*]], [[Y0:%.*]]
-; CHECK-NEXT:    [[T1:%.*]] = udiv i8 [[T0]], [[X]]
-; CHECK-NEXT:    [[R:%.*]] = icmp eq i8 [[T1]], [[Y1:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[T0]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[X]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Y1:%.*]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[TMP5:%.*]] = icmp ule i16 [[TMP4]], [[TMP1]]
+; CHECK-NEXT:    [[TMP6:%.*]] = add nuw i16 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[TMP7:%.*]] = icmp ugt i16 [[TMP6]], [[TMP1]]
+; CHECK-NEXT:    [[R:%.*]] = and i1 [[TMP5]], [[TMP7]]
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = mul i8 %x, %y0
@@ -162,8 +174,11 @@ define i1 @n9_different_y(i8 %x, i8 %y0, i8 %y1) {
 define i1 @n10_wrong_pred(i8 %x, i8 %y) {
 ; CHECK-LABEL: @n10_wrong_pred(
 ; CHECK-NEXT:    [[T0:%.*]] = mul i8 [[X:%.*]], [[Y:%.*]]
-; CHECK-NEXT:    [[T1:%.*]] = udiv i8 [[T0]], [[X]]
-; CHECK-NEXT:    [[R:%.*]] = icmp ult i8 [[T1]], [[Y]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[T0]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[X]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i8 [[Y]] to i16
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP2]], [[TMP3]]
+; CHECK-NEXT:    [[R:%.*]] = icmp ugt i16 [[TMP4]], [[TMP1]]
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = mul i8 %x, %y

@@ -33,13 +33,13 @@ define i1 @icmp_select_var(i8 %x, i8 %y, i8 %z) {
 
 define i1 @icmp_select_var_commuted(i8 %x, i8 %y, i8 %_z) {
 ; CHECK-LABEL: @icmp_select_var_commuted(
-; CHECK-NEXT:    [[Z:%.*]] = udiv i8 42, [[_Z:%.*]]
+; CHECK-NEXT:    [[Z:%.*]] = sdiv i8 42, [[_Z:%.*]]
 ; CHECK-NEXT:    [[CMP1:%.*]] = icmp eq i8 [[X:%.*]], 0
 ; CHECK-NEXT:    [[CMP21:%.*]] = icmp eq i8 [[Z]], [[Y:%.*]]
 ; CHECK-NEXT:    [[CMP2:%.*]] = select i1 [[CMP1]], i1 true, i1 [[CMP21]]
 ; CHECK-NEXT:    ret i1 [[CMP2]]
 ;
-  %z = udiv i8 42, %_z ; thwart complexity-based canonicalization
+  %z = sdiv i8 42, %_z ; thwart complexity-based canonicalization
   %cmp1 = icmp eq i8 %x, 0
   %sel = select i1 %cmp1, i8 %z, i8 %y
   %cmp2 = icmp eq i8 %z, %sel

@@ -77,8 +77,10 @@ define i1 @n4_extrause(i8 %x, i8 %y) {
 
 define i1 @n5_not_negone(i8 %x, i8 %y) {
 ; CHECK-LABEL: @n5_not_negone(
-; CHECK-NEXT:    [[T0:%.*]] = udiv i8 -2, [[X:%.*]]
-; CHECK-NEXT:    [[R:%.*]] = icmp uge i8 [[T0]], [[Y:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw i16 [[TMP1]], [[TMP2]]
+; CHECK-NEXT:    [[R:%.*]] = icmp ult i16 [[TMP3]], 255
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = udiv i8 -2, %x ; not -1
@@ -88,8 +90,11 @@ define i1 @n5_not_negone(i8 %x, i8 %y) {
 
 define i1 @n6_wrong_pred0(i8 %x, i8 %y) {
 ; CHECK-LABEL: @n6_wrong_pred0(
-; CHECK-NEXT:    [[T0:%.*]] = udiv i8 -1, [[X:%.*]]
-; CHECK-NEXT:    [[R:%.*]] = icmp ule i8 [[T0]], [[Y:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = add nuw nsw i16 [[TMP2]], 1
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[R:%.*]] = icmp ugt i16 [[TMP4]], 255
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = udiv i8 -1, %x
@@ -99,8 +104,11 @@ define i1 @n6_wrong_pred0(i8 %x, i8 %y) {
 
 define i1 @n6_wrong_pred1(i8 %x, i8 %y) {
 ; CHECK-LABEL: @n6_wrong_pred1(
-; CHECK-NEXT:    [[T0:%.*]] = udiv i8 -1, [[X:%.*]]
-; CHECK-NEXT:    [[R:%.*]] = icmp ugt i8 [[T0]], [[Y:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = add nuw nsw i16 [[TMP2]], 1
+; CHECK-NEXT:    [[TMP4:%.*]] = mul nuw i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[R:%.*]] = icmp ult i16 [[TMP4]], 256
 ; CHECK-NEXT:    ret i1 [[R]]
 ;
   %t0 = udiv i8 -1, %x

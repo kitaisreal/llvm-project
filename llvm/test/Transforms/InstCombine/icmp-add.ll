@@ -1125,12 +1125,12 @@ define i1 @icmp_add_add_C_comm1(i32 %a, i32 %b) {
 
 define i1 @icmp_add_add_C_comm2(i32 %X, i32 %b) {
 ; CHECK-LABEL: @icmp_add_add_C_comm2(
-; CHECK-NEXT:    [[A:%.*]] = udiv i32 42, [[X:%.*]]
+; CHECK-NEXT:    [[A:%.*]] = sdiv i32 42, [[X:%.*]]
 ; CHECK-NEXT:    [[TMP1:%.*]] = sub i32 0, [[B:%.*]]
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ugt i32 [[A]], [[TMP1]]
 ; CHECK-NEXT:    ret i1 [[CMP]]
 ;
-  %a = udiv i32 42, %X ; thwart complexity-based canonicalization
+  %a = sdiv i32 42, %X ; thwart complexity-based canonicalization
   %add1 = add i32 %a, %b
   %add2 = add i32 %add1, -1
   %cmp = icmp ugt i32 %a, %add2
@@ -1139,12 +1139,12 @@ define i1 @icmp_add_add_C_comm2(i32 %X, i32 %b) {
 
 define i1 @icmp_add_add_C_comm2_pred(i32 %X, i32 %b) {
 ; CHECK-LABEL: @icmp_add_add_C_comm2_pred(
-; CHECK-NEXT:    [[A:%.*]] = udiv i32 42, [[X:%.*]]
+; CHECK-NEXT:    [[A:%.*]] = sdiv i32 42, [[X:%.*]]
 ; CHECK-NEXT:    [[TMP1:%.*]] = sub i32 0, [[B:%.*]]
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ule i32 [[A]], [[TMP1]]
 ; CHECK-NEXT:    ret i1 [[CMP]]
 ;
-  %a = udiv i32 42, %X ; thwart complexity-based canonicalization
+  %a = sdiv i32 42, %X ; thwart complexity-based canonicalization
   %add1 = add i32 %a, %b
   %add2 = add i32 %add1, -1
   %cmp = icmp ule i32 %a, %add2
@@ -1168,9 +1168,12 @@ define i1 @icmp_add_add_C_comm2_wrong_pred(i32 %X, i32 %b) {
 
 define i1 @icmp_add_add_C_comm3(i32 %X, i32 %b) {
 ; CHECK-LABEL: @icmp_add_add_C_comm3(
-; CHECK-NEXT:    [[A:%.*]] = udiv i32 42, [[X:%.*]]
 ; CHECK-NEXT:    [[TMP1:%.*]] = sub i32 0, [[B:%.*]]
-; CHECK-NEXT:    [[CMP:%.*]] = icmp ugt i32 [[A]], [[TMP1]]
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i32 [[X:%.*]] to i64
+; CHECK-NEXT:    [[TMP3:%.*]] = zext i32 [[TMP1]] to i64
+; CHECK-NEXT:    [[TMP4:%.*]] = add nuw nsw i64 [[TMP3]], 1
+; CHECK-NEXT:    [[TMP5:%.*]] = mul nuw i64 [[TMP4]], [[TMP2]]
+; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i64 [[TMP5]], 43
 ; CHECK-NEXT:    ret i1 [[CMP]]
 ;
   %a = udiv i32 42, %X ; thwart complexity-based canonicalization

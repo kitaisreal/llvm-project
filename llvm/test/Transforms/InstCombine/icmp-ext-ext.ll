@@ -342,8 +342,13 @@ define i1 @sext_zext_ult_known_nonneg(i8 %x, i8 %y) {
 
 define i1 @sext_zext_ne_known_nonneg(i8 %x, i8 %y) {
 ; CHECK-LABEL: @sext_zext_ne_known_nonneg(
-; CHECK-NEXT:    [[N:%.*]] = udiv i8 [[Y:%.*]], 6
-; CHECK-NEXT:    [[C:%.*]] = icmp ne i8 [[N]], [[X:%.*]]
+; CHECK-NEXT:    [[TMP1:%.*]] = zext i8 [[Y:%.*]] to i16
+; CHECK-NEXT:    [[TMP2:%.*]] = zext i8 [[X:%.*]] to i16
+; CHECK-NEXT:    [[TMP3:%.*]] = mul nuw nsw i16 [[TMP2]], 6
+; CHECK-NEXT:    [[TMP4:%.*]] = icmp ugt i16 [[TMP3]], [[TMP1]]
+; CHECK-NEXT:    [[TMP5:%.*]] = add nuw nsw i16 [[TMP3]], 6
+; CHECK-NEXT:    [[TMP6:%.*]] = icmp ule i16 [[TMP5]], [[TMP1]]
+; CHECK-NEXT:    [[C:%.*]] = or i1 [[TMP4]], [[TMP6]]
 ; CHECK-NEXT:    ret i1 [[C]]
 ;
   %a = sext i8 %x to i32

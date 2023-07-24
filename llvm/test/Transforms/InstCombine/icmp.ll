@@ -580,11 +580,11 @@ define i1 @test28_extra_uses(i32 %x, i32 %y, i32 %z) {
 
 define i1 @ugt_sub(i32 %xsrc, i32 %y) {
 ; CHECK-LABEL: @ugt_sub(
-; CHECK-NEXT:    [[X:%.*]] = udiv i32 [[XSRC:%.*]], 42
+; CHECK-NEXT:    [[X:%.*]] = sdiv i32 [[XSRC:%.*]], 42
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ult i32 [[X]], [[Y:%.*]]
 ; CHECK-NEXT:    ret i1 [[CMP]]
 ;
-  %x = udiv i32 %xsrc, 42 ; thwart complexity-based canonicalization
+  %x = sdiv i32 %xsrc, 42 ; thwart complexity-based canonicalization
   %sub = sub i32 %x, %y
   %cmp = icmp ugt i32 %sub, %x
   ret i1 %cmp
@@ -594,11 +594,11 @@ define i1 @ugt_sub(i32 %xsrc, i32 %y) {
 
 define <2 x i1> @ult_sub(<2 x i8> %xsrc, <2 x i8> %y) {
 ; CHECK-LABEL: @ult_sub(
-; CHECK-NEXT:    [[X:%.*]] = udiv <2 x i8> [[XSRC:%.*]], <i8 42, i8 -42>
+; CHECK-NEXT:    [[X:%.*]] = sdiv <2 x i8> [[XSRC:%.*]], <i8 42, i8 -42>
 ; CHECK-NEXT:    [[CMP:%.*]] = icmp ult <2 x i8> [[X]], [[Y:%.*]]
 ; CHECK-NEXT:    ret <2 x i1> [[CMP]]
 ;
-  %x = udiv <2 x i8> %xsrc, <i8 42, i8 -42> ; thwart complexity-based canonicalization
+  %x = sdiv <2 x i8> %xsrc, <i8 42, i8 -42> ; thwart complexity-based canonicalization
   %sub = sub <2 x i8> %x, %y
   %cmp = icmp ult <2 x i8> %x, %sub
   ret <2 x i1> %cmp
